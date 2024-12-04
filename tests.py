@@ -118,7 +118,15 @@ def test_reflector_decoding(dif_reflector_enigmas):
         output.append(elem.encode_str('ENIGMA'))
     assert output[0] != output[1]
 
-#Отработка некорректного ввода
+# Корректность работы с разными сообщениями
+def test_coding(random_str):
+    coding = []
+    cases = random_str
+    for elem in cases:
+        coding.append(main_test('ERR', 'QW KF YH NV LS AZ TO', elem))
+    assert cases != coding
+
+# Отработка некорректного ввода
 @pytest.mark.parametrize('position, plugboard, text',
                          [('F', 'AB', 'TEST'),
                           ('РУС', 'AB', 'TEST'),
