@@ -79,74 +79,77 @@ def print_help(args):
     print("Соединительная панель: пары букв, написанные слитно. Количество: от нуля до половины алфавита")
     print("Текст для шифрования: любой текст, включающий в себя только символы алфавита")
 
-#Считывание настроек энигмы из текстового фалйа
-input_data = []
-file_path = "settings.txt"
-with open(file_path, "r", encoding="utf-8") as file:
-    for line in file:
-        line = line.strip()
-        if line[0] != "#":
-            input_data.append(line)
+if __name__ == "__main__":
+    #Считывание настроек энигмы из текстового файла
+    input_data = []
+    file_path = "settings.txt"
+    with open(file_path, "r", encoding="utf-8") as file:
+        for line in file:
+            line = line.strip()
+            if line[0] != "#":
+                input_data.append(line)
 
-alphabet = input_data[0]
-reflector = Reflector(alphabet, input_data[4])
+    alphabet = input_data[0]
+    reflector = Reflector(alphabet, input_data[4])
 
-#Если осуществляется консольный запуск с передачей параметров:
-if len(sys.argv) > 1:
+    #Если осуществляется консольный запуск с передачей параметров:
+    if len(sys.argv) > 1:
 
-    if sys.argv[1] == "help":
-        print_help(len(sys.argv))
-        sys.exit(0)
+        if sys.argv[1] == "help":
+            print_help(len(sys.argv))
+            sys.exit(0)
 
-    elif len(sys.argv) - 1 < 2:
-        print ("Некорректное количество аргументов. Для помощи воспользуйтесь help")
-        sys.exit(0)
+        elif len(sys.argv) - 1 < 2:
+            print(sys.argv)
+            print ("Некорректное количество аргументов. Для помощи воспользуйтесь help")
+            sys.exit(0)
 
-    #Считывание положения роторов
-    positions = sys.argv[1]
-    check_positions(alphabet, positions)
+        #Считывание положения роторов
+        positions = sys.argv[1]
+        check_positions(alphabet, positions)
 
-    #Считывание соединительной панели
-    if len(sys.argv) - 1 > 2:
-        args = sys.argv[2:-1]
-        plugboard_input = " ".join(args)
+        #Считывание соединительной панели
+        if len(sys.argv) - 1 > 2:
+            args = sys.argv[2:-1]
+            plugboard_input = " ".join(args)
+            check_plugboard_input(alphabet, plugboard_input)
+            plugboard = Plugboard(plugboard_input)
+        else:
+            plugboard = Plugboard("")
+
+        #Считывание текста
+        text = sys.argv[-1]
+        check_text(alphabet, text)
+
+    #Если осуществляется запуск через текстовый интерфейс/через консоль без передачи данных
+    else:
+        '''
+        print("Для начала работы введите start. Для получения справки введите help")
+        user_input = ""
+        while user_input != "start":
+            user_input = input()
+            if user_input == "help":
+                print_help(len(sys.argv))
+        '''
+        #Считывание положения роторов
+        positions = input("Введите положение 3 роторов (3 буквы, слитно):")
+        check_positions(alphabet, positions)
+
+        #Считывание соединительной панели
+        plugboard_input = input("Введите настройки соединительной панели в виде пар букв, написанных слитно:")
         check_plugboard_input(alphabet, plugboard_input)
         plugboard = Plugboard(plugboard_input)
-    else:
-        plugboard = Plugboard("")
 
-    #Считывание текста
-    text = sys.argv[-1]
+        #Считывание текста
+        text = input("Введите текст, который нужно зашифровать:")
+
     check_text(alphabet, text)
 
-#Если осуществляется запуск через текстовый интерфейс/через консоль без передачи данных
-else:
-    print("Для начала работы введите start. Для получения справки введите help")
-    user_input = ""
-    while user_input != "start":
-        user_input = input()
-        if user_input == "help":
-            print_help(len(sys.argv))
+    #Инициализация роторов и энигмы
+    rotor1 = Rotor(alphabet, input_data[1], positions[0])
+    rotor2 = Rotor(alphabet, input_data[2], positions[1])
+    rotor3 = Rotor(alphabet, input_data[3], positions[2])
+    enigma = Enigma(plugboard, rotor1, rotor2, rotor3, reflector)
 
-    #Считывание положения роторов
-    positions = input("Введите положение 3 роторов (3 буквы, слитно):")
-    check_positions(alphabet, positions)
-
-    #Считывание соединительной панели
-    plugboard_input = input("Введите настройки соединительной панели в виде пар букв, написанных слитно:")
-    check_plugboard_input(alphabet, plugboard_input)
-    plugboard = Plugboard(plugboard_input)
-
-    #Считывание текста
-    text = input("Введите текст, который нужно зашифровать:")
-
-check_text(alphabet, text)
-
-#Инициализация роторов и энигмы
-rotor1 = Rotor(alphabet, input_data[1], positions[0])
-rotor2 = Rotor(alphabet, input_data[2], positions[1])
-rotor3 = Rotor(alphabet, input_data[3], positions[2])
-enigma = Enigma(plugboard, rotor1, rotor2, rotor3, reflector)
-
-#Вывод зашифрованного сообщения
-print(enigma.encode_str(text))
+    #Вывод зашифрованного сообщения
+    print(enigma.encode_str(text))

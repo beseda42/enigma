@@ -1,10 +1,10 @@
 # Алфавит
-АБВГ
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
 # Ротор 1
-ГАБВ
+QWERTYUIOPASDFGHJKLZXCVBNM
 # Ротор 2
-БАГВ
+MNBVCXZPOIUYTREWQASDFGHJKL
 # Ротор 3
-ВГАБ
+QAZXSWEDCVFRTGBNHYUJMKIOLP
 # Рефлектор
-А-Г Б-В В-Б Г-А
+Q-W W-Q E-R R-E T-Y Y-T U-I I-U O-P P-O A-S S-A D-F F-D G-H H-G J-K K-J L-Z Z-L X-C C-X V-B B-V N-M M-N
